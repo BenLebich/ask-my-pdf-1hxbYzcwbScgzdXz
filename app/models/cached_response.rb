@@ -1,0 +1,2 @@
+class CachedResponse < ApplicationRecord
+end
