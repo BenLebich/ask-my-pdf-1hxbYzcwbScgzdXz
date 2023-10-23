@@ -101,7 +101,7 @@ class PdfToEmbeddings
 
   def self.generate_prompt(question, relevant_pages, token_limit, embeddings_file_path)
     prompt = "This is the question: " + question
-    prompt += "\n\nNow find the answer in the text below, keep the answers short, and concise.\n\n"
+    prompt += "\n\nNow find the answer in the text below, keep the answers short, and concise. Format it as a simple string answer, don't add any breaklines or any &nbsp, use regular spaces only.\n\n"
     page_contents = load_page_contents(embeddings_file_path)
   
     total_tokens = OpenAI.rough_token_count(prompt)
@@ -140,7 +140,7 @@ class PdfToEmbeddings
 
     @client = OpenAI::Client.new(access_token: ENV['OPENAI_KEY'])
     response = @client.completions(parameters: {
-      model: "text-davinci-003",
+      model: "gpt-3.5-turbo-instruct",
       prompt: prompt,
       max_tokens: max_tokens
     })
@@ -149,6 +149,14 @@ class PdfToEmbeddings
     
     if response["choices"]
       completion = response["choices"].map { |c| c["text"] }.first
+
+      # Decode HTML entities
+      completion = CGI.unescapeHTML(completion)
+
+      # Normalize text
+      completion.gsub!(/\s+/, ' ')
+      completion.gsub!(/\n/, ' ')
+      completion.strip!
     else
       puts "Warning: API call returned unexpected data: #{response}"
       completion = nil

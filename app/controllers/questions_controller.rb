@@ -5,7 +5,6 @@ class QuestionsController < ApplicationController
     question = params[:question]
 
     cached_response = CachedResponse.find_by(question: question)
-    
     if cached_response
       render json: { answer: cached_response.answer }, status: :ok
       return
@@ -22,7 +21,7 @@ class QuestionsController < ApplicationController
 
       CachedResponse.create(question: question, answer: completion)
 
-      render json: { answer: completion }, status: :ok
+      render json: { answer: completion, prompt: prompt }, status: :ok
     else
       render json: { error: 'Question parameter is missing' }, status: :bad_request
     end
