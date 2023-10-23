@@ -6,7 +6,7 @@ const AskMyPdf: React.FC = () => {
   const [answer, setAnswer] = useState<string>("");
   const [displayedAnswer, setDisplayedAnswer] = useState<string>("");
   const [loading, setLoading] = useState(false);
-  
+
   const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -108,9 +108,12 @@ const AskMyPdf: React.FC = () => {
           <div className="bg-white p-4 border rounded">{displayedAnswer}</div>
         )}
       </div>
-      <p className={"mt-4"}>
+      <p className={"mt-4 flex flex-row flex-wrap gap-4 justify-between"}>
         <a href="https://lebich.dev" target="_blank" className="font-medium">
           lebich.dev
+        </a>
+        <a href="https://github.com/BenLebich/ask-my-pdf-1hxbYzcwbScgzdXz/" target="_blank" className="font-medium">
+          github
         </a>
       </p>
     </div>
